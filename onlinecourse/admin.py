@@ -27,7 +27,7 @@ class LessonAdmin(admin.ModelAdmin):
     
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [ChoiceInline]
-    fields = ('question_text', 'grade', 'lesson')
+    fields = ('question', 'grade', 'lesson')
 
 
 # <HINT> Register Question and Choice models here
