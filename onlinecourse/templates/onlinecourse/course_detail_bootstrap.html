@@ -71,7 +71,7 @@
             <!-- <HINT> Each example will have many questions -->
                 {% for question in lesson.question_set.all %}
                 <div class="card mt-1">
-                    <div class="card-header"><h5>{{ question.question_text}}</h5></div>
+                    <div class="card-header"><h5>{{ question.question}}</h5></div>
                     {% csrf_token %}
                     <div class="form-group"  style='padding: 20px;'>
                      <!-- <HINT> Each question will have many choices -->
