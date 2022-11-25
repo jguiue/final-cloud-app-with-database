@@ -59,46 +59,30 @@
           <br>
          
             <!-- <HINT> If user is authenticated, show course exam with a list of question -->
-            <div id="exam" class="collapse">
-            {% if user.is_authenticated %}
-                 
-            <!-- <HINT> For each question choice, you may create a checkbox input like
-            <input type="check" name="choice_{{choice.id}}" id="{{choice.id}}" ...>
-            <HINT> Each example will have many questions -->
-            {% for lesson in course.lesson_set.all %}
-                {% for question in lesson.question_set.all %}
-                <div class="card mt-1">
-                    <div class="card-header"><h5>{{ question.question}}</h5></div>
-                    {% csrf_token %}
-                    <div class="form-group"  style='padding: 20px;'>
-                     <!-- <HINT> Each question will have many choices -->
-                        {% for choice in question.choice_set.all %}
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" name="choice_{{choice.id}}"
-                                    class="form-check-input" id="{{choice.id}}"
-                                    value="{{choice.id}}">{{ choice.choice }}
-                            </label>
-                        </div>
-                        {% endfor %}
-                    </div>
+                {% if user.is_authenticated %}
+                <div id="exam" class="collapse">
+                    <form id="questionform" action="{% url 'onlinecourse:submit' course.id %}" method="POST">
+                        {% for question in course.question_set.all %}
+                        <div class="card mt-1">
+                            <div class="card-header"><h5>{{ question.content }}</h5></div>
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    {% for choice in question.choice_set.all %}
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="checkbox" name="choice_{{choice.id}}"
+                                                   class="form-check-input" id="{{choice.id}}"
+                                                   value="{{choice.id}}">{{ choice.content }}
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        <input class="btn btn-success btn-block" type="submit" value="Submit">
+                    </form>
                 </div>
-                {% endfor %}
-                {% endfor %}
-                <br>
-               <!-- <HINT> Create a form to collect the selected choices for all questions -->
-                <input class="btn btn-success btn-block" type="submit" value="Submit">
-                <br><br><br>
-            </form> 
-			{% endif %}
-
-            <!--Check here to see more details Bootstrap checkbox
-             https://www.w3schools.com/bootstrap4/bootstrap_forms_inputs.asp-->
-    </div>
-</body>
-</html>
-Footer
-© 2022 GitHub, Inc.
-Footer navigation
-Terms
-Privacy
+                {% endif %}
+            </div>
+        </body>
+        </html>
