@@ -64,8 +64,9 @@
                  
             <!-- <HINT> For each question choice, you may create a checkbox input like
             <input type="check" name="choice_{{choice.id}}" id="{{choice.id}}" ...>
-                {% for lesson in course.lesson_set.all %}
+
             <!-- <HINT> Each example will have many questions -->
+            {% for lesson in course.lesson_set.all %}
                 {% for question in lesson.question_set.all %}
                 <div class="card mt-1">
                     <div class="card-header"><h5>{{ question.question}}</h5></div>
@@ -77,7 +78,7 @@
                             <label class="form-check-label">
                                 <input type="checkbox" name="choice_{{choice.id}}"
                                     class="form-check-input" id="{{choice.id}}"
-                                    value="{{choice.id}}">{{ choice.choice_text }}
+                                    value="{{choice.id}}">{{ choice.choice }}
                             </label>
                         </div>
                         {% endfor %}
@@ -90,10 +91,15 @@
                 <input class="btn btn-success btn-block" type="submit" value="Submit">
                 <br><br><br>
             </form> 
-
+			{% endif %}
 
             <!--Check here to see more details Bootstrap checkbox
              https://www.w3schools.com/bootstrap4/bootstrap_forms_inputs.asp-->
     </div>
 </body>
 </html>
+Footer
+© 2022 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
