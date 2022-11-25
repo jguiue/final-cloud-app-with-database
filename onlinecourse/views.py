@@ -112,29 +112,16 @@ def extract_answers(request):
             submitted_anwsers.append(choice_id)
     return submitted_anwsers
 
-# <HINT> Create a submit view to create an exam submission record for a course enrollment,
-# you may implement it based on following logic:
-
-
-        
-
-
 def submit(request, course_id):
-    # Get user and course object, then get the associated enrollment object created when the user enrolled the course    
-    user = request.user
     course = get_object_or_404(Course, pk=course_id)
-    enroll = Enrollment.objects.filter(user=user, course=course).get()
+    user = request.user
+    enrollment = Enrollment.objects.get(user=user, course=course)
+    submission = Submission.objects.create(enrollment=enrollment)
     choices = extract_answers(request)
-    # Create a submission object referring to the enrollment
-    submission = Submission.objects.create(enrollment_id = enroll.id )
-    # JODI, REVISAR!Collect the selected choices from exam form
-    # Add each selected choice object to the submission object
-    for choice in choices:
-        c = Choice.objects.filter(id = int(choice)).get()
-        submission.choices.add(c)
-    submission.save()
-    # Redirect to show_exam_result with the submission id
-    return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(course.id,submission.id ))) 
+    submission.choices.set(choices)
+    submission_id = submission.id
+    return HttpResponseRedirect(reverse(viewname='onlinecourse:exam_result', args=(course_id, submission_id,)))
+
 
 # <HINT> Create an exam result view to check if learner passed exam and show their question results and result for each question,
 # you may implement it based on the following logic:
@@ -144,14 +131,15 @@ def submit(request, course_id):
         # Calculate the total score
 def show_exam_result(request, course_id, submission_id):
     context = {}
-    course = Course.objects.get(id = course_id)
-    submit = Submission.objects.get(id = submission_id)
-    selected = Submission.objects.filter(id = submission_id).values_list('choices',flat = True)
-    score = 0
-    for i in submit.choices.all().filter(is_correct=True).values_list('question_id'):
-        score += Question.objects.filter(id=i[0]).first().grade    
-    context['selected'] = selected
-    context['grade'] = score
+    course = get_object_or_404(Course, pk=course_id)
+    submission = Submission.objects.get(id=submission_id)
+    choices = submission.choices.all()
+    total_score = 0
+    for choice in choices:
+        if choice.is_correct:
+            total_score += choice.question.grade
     context['course'] = course
+    context['grade'] = total_score
+    context['choices'] = choices
     return  render(request, 'onlinecourse/exam_result_bootstrap.html', context)
 

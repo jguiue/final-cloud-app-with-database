@@ -64,8 +64,7 @@
                  
             <!-- <HINT> For each question choice, you may create a checkbox input like
             <input type="check" name="choice_{{choice.id}}" id="{{choice.id}}" ...>
-
-            <!-- <HINT> Each example will have many questions -->
+            <HINT> Each example will have many questions -->
             {% for lesson in course.lesson_set.all %}
                 {% for question in lesson.question_set.all %}
                 <div class="card mt-1">
