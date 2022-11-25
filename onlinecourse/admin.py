@@ -11,6 +11,9 @@ class QuestionInline(admin.StackedInline):
     model = Question
     extra = 5
 
+class LessonInline(admin.StackedInline):
+    model = Lesson
+    extra = 5
 
 # Register your models here.
 class CourseAdmin(admin.ModelAdmin):
